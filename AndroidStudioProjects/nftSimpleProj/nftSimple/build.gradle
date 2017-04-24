@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion = 24
-    buildToolsVersion = "24.0.3"
+    buildToolsVersion = "25.0.2"
 
     defaultConfig {
         applicationId = "org.artoolkit.ar.samples.NftSimple"
@@ -19,13 +19,26 @@ android {
         }
 
         ndk {
-            moduleName = "NftSimple"
+            abiFilters 'armeabi-v7a' //'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+        }
+
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_PLATFORM=android-14',
+                        '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=c++_shared'
+            }
         }
     }
 
     sourceSets.main {
         jni.srcDirs = []
         jniLibs.srcDir 'src/main/libs'
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/jni/CMakeLists.txt'
+        }
     }
 }
 
